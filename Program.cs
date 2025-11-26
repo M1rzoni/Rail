@@ -1,6 +1,16 @@
 ﻿using Microsoft.AspNetCore.Cors;
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
+
+// Konfiguriši JSON serializaciju da bude case-insensitive
+var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+});
+
 var app = builder.Build();
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
@@ -21,47 +31,70 @@ app.MapGet("/", () =>
 });
 
 // POST endpoint za artikle
-app.MapPost("/item", (ItemRequest request) =>
+app.MapPost("/item", async (HttpContext context) =>
 {
-    // Baza artikala
-    var items = new[]
+    try
     {
-        new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", Price = 0.9 },
-        new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", Price = 30.0 }
-    };
-
-    // Očisti barcode - ukloni razmake i nove redove
-    string cleanedBarcode = request.SifraArtikla?.Trim() ?? "";
-
-    Console.WriteLine($"Primljen barcode: '{request.SifraArtikla}'");
-    Console.WriteLine($"Očišćen barcode: '{cleanedBarcode}'");
-    Console.WriteLine($"Dužina: {cleanedBarcode.Length}");
-
-    // Pretraga
-    var item = items.FirstOrDefault(i => i.ArSif == cleanedBarcode);
-
-    if (item == null)
-    {
-        Console.WriteLine($"Artikal NOT FOUND za: {cleanedBarcode}");
-        return Results.NotFound(new
+        // Čitaj raw body kao string
+        string body;
+        using (var reader = new StreamReader(context.Request.Body))
         {
-            message = "Artikal nije pronađen",
-            searchedBarcode = cleanedBarcode,
-            availableBarcodes = items.Select(x => x.ArSif).ToArray()
-        });
-    }
+            body = await reader.ReadToEndAsync();
+        }
 
-    Console.WriteLine($"Artikal pronađen: {item.ArNa1}");
-    return Results.Ok(item);
+        Console.WriteLine($"Raw Body: {body}");
+
+        // Deserijalizuj JSON
+        var request = JsonSerializer.Deserialize<ItemRequest>(body, jsonOptions);
+        Console.WriteLine($"Parsed SifraArtikla: '{request?.SifraArtikla}'");
+
+        if (request?.SifraArtikla == null)
+        {
+            Console.WriteLine("SifraArtikla je NULL!");
+            return Results.BadRequest(new { message = "SifraArtikla je obavezno polje" });
+        }
+
+        // Baza artikala
+        var items = new[]
+        {
+            new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", MPC = 0.9 },
+            new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", MPC = 30.0 },
+            new { ArSif = "3858881088306", ArNa1 = "Caj Kamilica & Đumbir", MPC = 2.8 },
+            new { ArSif = "5397184621165", ArNa1 = "Dell Wireless Keyboard and Mou", MPC = 70 },
+            new { ArSif = "3877002204067", ArNa1 = "Rukavice Lateks Bez Pudera", MPC = 13.7 }
+        };
+
+        // Očisti barcode
+        string cleanedBarcode = request.SifraArtikla.Trim();
+        Console.WriteLine($"Tražim: '{cleanedBarcode}'");
+
+        // Pretraga
+        var item = items.FirstOrDefault(i => i.ArSif == cleanedBarcode);
+
+        if (item == null)
+        {
+            Console.WriteLine($"Artikal NOT FOUND za: {cleanedBarcode}");
+            return Results.Json(null);
+        }
+
+        Console.WriteLine($"✓ Artikal pronađen: {item.ArNa1}");
+        return Results.Ok(item);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ ERROR: {ex.Message}");
+        Console.WriteLine($"Stack: {ex.StackTrace}");
+        return Results.Json(null);
+    }
 });
 
-// Debug endpoint - vidi sve dostupne artikle
+// Debug endpoint
 app.MapGet("/items", () =>
 {
     var items = new[]
     {
-        new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", Price = 0.9 },
-        new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", Price = 30.0 }
+        new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", MPC = 0.9 },
+        new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", MPC = 30.0 }
     };
     return items;
 });
