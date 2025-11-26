@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BarcodeScannerAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a09166d0f769921dfbc98b44881fbce8ccdcd350")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2a226e25b2a20aafb903c8c3a1c0811fa9830e52")]
 [assembly: System.Reflection.AssemblyProductAttribute("BarcodeScannerAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BarcodeScannerAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
