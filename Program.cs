@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Cors;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors();
 
 // Konfiguriši JSON serializaciju da bude case-insensitive
-var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 builder.Services.Configure<JsonOptions>(options =>
 {
-    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 var app = builder.Build();
@@ -45,6 +45,7 @@ app.MapPost("/item", async (HttpContext context) =>
         Console.WriteLine($"Raw Body: {body}");
 
         // Deserijalizuj JSON
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         var request = JsonSerializer.Deserialize<ItemRequest>(body, jsonOptions);
         Console.WriteLine($"Parsed SifraArtikla: '{request?.SifraArtikla}'");
 
@@ -55,7 +56,7 @@ app.MapPost("/item", async (HttpContext context) =>
         }
 
         // Baza artikala
-        var items = new[]
+        var items = new object[]
         {
             new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", MPC = 0.9 },
             new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", MPC = 30.0 },
@@ -69,7 +70,11 @@ app.MapPost("/item", async (HttpContext context) =>
         Console.WriteLine($"Tražim: '{cleanedBarcode}'");
 
         // Pretraga
-        var item = items.FirstOrDefault(i => i.ArSif == cleanedBarcode);
+        var item = items.FirstOrDefault(i =>
+        {
+            var prop = i.GetType().GetProperty("ArSif");
+            return prop?.GetValue(i)?.ToString() == cleanedBarcode;
+        });
 
         if (item == null)
         {
@@ -77,7 +82,7 @@ app.MapPost("/item", async (HttpContext context) =>
             return Results.Json(null);
         }
 
-        Console.WriteLine($"✓ Artikal pronađen: {item.ArNa1}");
+        Console.WriteLine($"✓ Artikal pronađen");
         return Results.Ok(item);
     }
     catch (Exception ex)
@@ -91,12 +96,11 @@ app.MapPost("/item", async (HttpContext context) =>
 // Debug endpoint
 app.MapGet("/items", () =>
 {
-    var items = new[]
+    return new object[]
     {
         new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", MPC = 0.9 },
         new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", MPC = 30.0 }
     };
-    return items;
 });
 
 app.Run();
