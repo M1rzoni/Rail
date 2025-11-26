@@ -1,0 +1,9 @@
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.csproj.AssemblyReference.cache
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.AssemblyInfoInputs.cache
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.AssemblyInfo.cs
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.csproj.CoreCompileInputs.cache
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\BingoAdmin\Desktop\BarcodeScannerAPI\obj\Debug\net8.0\BarcodeScannerAPI.sourcelink.json

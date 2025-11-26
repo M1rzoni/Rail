@@ -4,8 +4,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 // Configure CORS
 builder.Services.AddCors(options =>
@@ -20,17 +18,16 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseCors();
 
+// Get port from Railway environment variable or use default
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Urls.Add($"http://0.0.0.0:{port}");
+
 app.MapGet("/", () =>
 {
-    var mediaItems = new[]
+    var mediaItems = new object[]
     {
         new { type = "video", url = "https://www.shutterstock.com/shutterstock/videos/1085118248/preview/stock-footage-ice-cubes-and-coke-poured-into-glass.mp4" },
         new { type = "video", url = "https://www.shutterstock.com/shutterstock/videos/1051047043/preview/stock-footage-moscow-russia-cinematic-footage-of-coca-cola-glass-bottle-classic-rotate-on-gray.mp4" },
@@ -57,9 +54,6 @@ app.MapPost("/item", (ItemRequest request) =>
     var itemData = itemsData.FirstOrDefault(item => item.ArSif == request.SifraArtikla);
     return Results.Ok(itemData);
 });
-
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();
 
