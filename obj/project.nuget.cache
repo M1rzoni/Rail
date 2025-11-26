@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "H2rlgkoPsAo=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\BingoAdmin\\Desktop\\BarcodeScannerAPI\\BarcodeScannerAPI.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\BingoAdmin\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.3.0\\microsoft.aspnetcore.cors.2.3.0.nupkg.sha512",
+    "C:\\Users\\BingoAdmin\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.0\\microsoft.aspnetcore.openapi.10.0.0.nupkg.sha512",
+    "C:\\Users\\BingoAdmin\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1510",
+      "level": "Warning",
+      "message": "PackageReference Microsoft.AspNetCore.Cors will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
+      "projectPath": "C:\\Users\\BingoAdmin\\Desktop\\BarcodeScannerAPI\\BarcodeScannerAPI.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\BingoAdmin\\Desktop\\BarcodeScannerAPI\\BarcodeScannerAPI.csproj",
+      "libraryId": "Microsoft.AspNetCore.Cors",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
+}
