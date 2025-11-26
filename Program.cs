@@ -58,7 +58,7 @@ app.MapPost("/item", async (HttpContext context) =>
         // Baza artikala
         var items = new object[]
         {
-            new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max", MPC = 0.9 },
+            new { ArSif = "5290047000940", ArNa1 = "Sok 330ML Pepsi Max",ArJmJ = "KOM", MPC = 0.9 },
             new { ArSif = "8713439241518", ArNa1 = "Primo Keyboard Spill-Resistant", MPC = 30.0 },
             new { ArSif = "3858881088306", ArNa1 = "Caj Kamilica & Đumbir", MPC = 2.8 },
             new { ArSif = "5397184621165", ArNa1 = "Dell Wireless Keyboard and Mou", MPC = 70 },
